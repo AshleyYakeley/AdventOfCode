@@ -22,5 +22,12 @@ executables:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
+  AdventOfCode-2021-02:
+    source-dirs: app/2021/02
+    main: Main.hs
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
     dependencies:
-    - AdventOfCode
+    - transformers
