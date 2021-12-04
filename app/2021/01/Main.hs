@@ -1,5 +1,4 @@
 module Main where
-import System.IO
 
 solve1 :: [Int] -> Int
 solve1 xx = length $ filter id $ zipWith (>) xx $ maxBound : xx

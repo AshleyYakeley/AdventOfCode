@@ -1,8 +1,4 @@
 module Main where
-import System.IO
-import Control.Monad.Trans.State
-import Data.Foldable
-import Data.Maybe
 
 type Bit = Int
 type D = [Bit]
