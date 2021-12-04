@@ -48,3 +48,14 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - transformers
+  AdventOfCode-2021-04:
+    source-dirs: app/2021/04
+    main: Main.hs
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    - -Wno-incomplete-uni-patterns
+    - -Wno-incomplete-patterns
+    dependencies:
+    - transformers
