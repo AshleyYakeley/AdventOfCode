@@ -59,3 +59,14 @@ executables:
     - -Wno-incomplete-patterns
     dependencies:
     - transformers
+  AdventOfCode-2021-05:
+    source-dirs: app/2021/05
+    main: Main.hs
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    - -Wno-incomplete-uni-patterns
+    dependencies:
+    - transformers
+    - array
