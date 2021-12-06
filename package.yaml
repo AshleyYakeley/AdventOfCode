@@ -70,3 +70,13 @@ executables:
     dependencies:
     - transformers
     - array
+  AdventOfCode-2021-06:
+    source-dirs: app/2021/06
+    main: Main.hs
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - transformers
+    - array
