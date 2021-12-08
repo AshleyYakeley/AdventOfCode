@@ -1,3 +1,5 @@
+{-# OPTIONS -Wno-incomplete-patterns #-}
+{-# OPTIONS -Wno-incomplete-uni-patterns #-}
 module Main where
 import Control.Monad.Trans.State
 import Data.Maybe

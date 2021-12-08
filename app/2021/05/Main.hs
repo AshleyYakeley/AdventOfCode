@@ -1,3 +1,4 @@
+{-# OPTIONS -Wno-incomplete-uni-patterns #-}
 module Main where
 import Control.Applicative
 import Data.Array.MArray hiding (range)

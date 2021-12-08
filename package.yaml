@@ -13,86 +13,40 @@ description:         Please see the README on GitHub at <https://github.com/Ashl
 
 dependencies:
 - base >= 4.7 && < 5
+- transformers
+- array
+- containers
 
 ghc-options:
-  - -Wall
-  - -Wincomplete-uni-patterns
-  - -Wincomplete-record-updates
-  - -Wcompat
-  - -Wnoncanonical-monad-instances
-  - -Wno-partial-type-signatures
+- -Wall
+- -Wincomplete-uni-patterns
+- -Wincomplete-record-updates
+- -Wcompat
+- -Wnoncanonical-monad-instances
+- -Wno-partial-type-signatures
 
 executables:
   AdventOfCode-2021-01:
     source-dirs: app/2021/01
     main: Main.hs
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
   AdventOfCode-2021-02:
     source-dirs: app/2021/02
     main: Main.hs
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    dependencies:
-    - transformers
   AdventOfCode-2021-03:
     source-dirs: app/2021/03
     main: Main.hs
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    dependencies:
-    - transformers
   AdventOfCode-2021-04:
     source-dirs: app/2021/04
     main: Main.hs
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    - -Wno-incomplete-uni-patterns
-    - -Wno-incomplete-patterns
-    dependencies:
-    - transformers
   AdventOfCode-2021-05:
     source-dirs: app/2021/05
     main: Main.hs
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    - -Wno-incomplete-uni-patterns
-    dependencies:
-    - transformers
-    - array
   AdventOfCode-2021-06:
     source-dirs: app/2021/06
     main: Main.hs
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    dependencies:
-    - transformers
-    - array
   AdventOfCode-2021-07:
     source-dirs: app/2021/07
     main: Main.hs
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
   AdventOfCode-2021-08:
     source-dirs: app/2021/08
     main: Main.hs
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    dependencies:
-    - containers
