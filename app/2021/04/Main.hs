@@ -1,15 +1,7 @@
 {-# OPTIONS -Wno-incomplete-patterns #-}
 {-# OPTIONS -Wno-incomplete-uni-patterns #-}
 module Main where
-import Control.Monad.Trans.State
-import Data.Maybe
-
--- copied from https://stackoverflow.com/a/4981265
-wordsWhen     :: (Char -> Bool) -> String -> [String]
-wordsWhen p s =  case dropWhile p s of
-                      "" -> []
-                      s' -> w : wordsWhen p s''
-                            where (w, s'') = break p s'
+import Lib
 
 type Board = [[Maybe Int]]
 
@@ -76,5 +68,5 @@ main = do
         nums = fmap read $ wordsWhen ((==) ',') numline
         boards :: [Board]
         boards = getBoards boardlines
-    putStrLn $ "Part 1: " <> (show $ evalState (part1 nums) boards)
-    putStrLn $ "Part 2: " <> (show $ evalState (part2 nums) boards)
+    reportPart1 $ evalState (part1 nums) boards
+    reportPart2 $ evalState (part2 nums) boards

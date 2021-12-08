@@ -1,4 +1,5 @@
 module Main where
+import Lib
 
 type Bit = Int
 type D = [Bit]
@@ -34,8 +35,8 @@ main = do
         dd0 = fmap (fmap (\c -> if c == '1' then 1 else 0)) $ lines f
         gamma = dNum $ fmap (\i -> getCommonestBit True i dd0) [0..11]
         epsilon = dNum $ fmap (\i -> getCommonestBit False i dd0) [0..11]
-    putStrLn $ "Part 1: " <> (show $ gamma * epsilon)
+    reportPart1 $ gamma * epsilon
     let
         o2 = dNum $ reduced True 0 dd0
         co2 = dNum $ reduced False 0 dd0
-    putStrLn $ "Part 2: " <> (show $ o2 * co2)
+    reportPart2 $ o2 * co2

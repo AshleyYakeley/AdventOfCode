@@ -1,6 +1,5 @@
 module Main where
-import Control.Monad.Trans.State
-import Data.Foldable
+import Lib
 
 parse :: [String] -> (Int,Int)
 parse ["forward",s] = (read s,0)
@@ -17,6 +16,6 @@ main :: IO ()
 main = do
     f <- readFile "app/2021/02/input.txt"
     let pairs = fmap (parse . words) $ lines f
-    putStrLn $ "Part 1: " <> show (sum (fmap fst pairs) * sum (fmap snd pairs))
+    reportPart1 $ sum (fmap fst pairs) * sum (fmap snd pairs)
     let (h,d) = snd $ snd $ runState (for_ pairs move) (0,(0,0))
-    putStrLn $ "Part 2: " <> show (h * d)
+    reportPart2 $ h * d

@@ -1,20 +1,6 @@
 {-# OPTIONS -Wno-incomplete-uni-patterns #-}
 module Main where
-import Data.Foldable
-import Data.Maybe
-import Data.List(sort)
-import Data.Set (Set,fromList)
-import Prelude hiding (iterate)
-
-flookup :: Eq a => a -> [(a, b)] -> b
-flookup a ab = fromMaybe (error "Nothing") $ lookup a ab
-
--- copied from https://stackoverflow.com/a/4981265
-wordsWhen     :: (Char -> Bool) -> String -> [String]
-wordsWhen p s =  case dropWhile p s of
-                      "" -> []
-                      s' -> w : wordsWhen p s''
-                            where (w, s'') = break p s'
+import Lib
 
 type Segs = String
 type Evidence = [Segs] -- always 10
@@ -72,5 +58,5 @@ main = do
     let
         disps :: [Display]
         disps = fmap getDisplay $ lines f
-    putStrLn $ "Part 1: " <> (show $ sum $ fmap (length . filter segsKnown . snd) disps)
-    putStrLn $ "Part 2: " <> (show $ sum $ fmap calcDisplay disps)
+    reportPart1 $ sum $ fmap (length . filter segsKnown . snd) disps
+    reportPart2 $ sum $ fmap calcDisplay disps

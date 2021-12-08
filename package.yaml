@@ -25,28 +25,41 @@ ghc-options:
 - -Wnoncanonical-monad-instances
 - -Wno-partial-type-signatures
 
+library:
+  source-dirs: lib
+  exposed-modules:
+  - Lib
+
 executables:
   AdventOfCode-2021-01:
     source-dirs: app/2021/01
+    dependencies: AdventOfCode
     main: Main.hs
   AdventOfCode-2021-02:
     source-dirs: app/2021/02
+    dependencies: AdventOfCode
     main: Main.hs
   AdventOfCode-2021-03:
     source-dirs: app/2021/03
+    dependencies: AdventOfCode
     main: Main.hs
   AdventOfCode-2021-04:
     source-dirs: app/2021/04
+    dependencies: AdventOfCode
     main: Main.hs
   AdventOfCode-2021-05:
     source-dirs: app/2021/05
+    dependencies: AdventOfCode
     main: Main.hs
   AdventOfCode-2021-06:
     source-dirs: app/2021/06
+    dependencies: AdventOfCode
     main: Main.hs
   AdventOfCode-2021-07:
     source-dirs: app/2021/07
+    dependencies: AdventOfCode
     main: Main.hs
   AdventOfCode-2021-08:
     source-dirs: app/2021/08
+    dependencies: AdventOfCode
     main: Main.hs

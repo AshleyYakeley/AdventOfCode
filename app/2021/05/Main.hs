@@ -1,17 +1,6 @@
 {-# OPTIONS -Wno-incomplete-uni-patterns #-}
 module Main where
-import Control.Applicative
-import Data.Array.MArray hiding (range)
-import Data.Array.IO hiding (range)
-import Data.Foldable
-import Data.IORef
-
--- copied from https://stackoverflow.com/a/4981265
-wordsWhen     :: (Char -> Bool) -> String -> [String]
-wordsWhen p s =  case dropWhile p s of
-                      "" -> []
-                      s' -> w : wordsWhen p s''
-                            where (w, s'') = break p s'
+import Lib
 
 type Point = (Int,Int)
 
@@ -67,9 +56,9 @@ main = do
         board <- newBoard
         for_ vents $ \v -> ventBoard False v board
         n <- countBoard board
-        putStrLn $ "Part 1: " <> (show n)
+        reportPart1 n
     do
         board <- newBoard
         for_ vents $ \v -> ventBoard True v board
         n <- countBoard board
-        putStrLn $ "Part 2: " <> (show n)
+        reportPart2 n
