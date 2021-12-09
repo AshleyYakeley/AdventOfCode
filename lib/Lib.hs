@@ -3,7 +3,7 @@ module Lib(module I,module Lib) where
 import Data.Foldable as I
 import Data.Traversable as I
 import Data.Maybe as I
-import Data.List as I (sort)
+import Data.List as I (sort,sortBy,sortOn,reverse,nub)
 import Data.Set as I (Set,fromList)
 import Control.Applicative as I
 import Data.Array.MArray as I hiding (range)
@@ -26,3 +26,7 @@ wordsWhen p s =  case dropWhile p s of
 
 flookup :: Eq a => a -> [(a, b)] -> b
 flookup a ab = fromMaybe (error "Nothing") $ lookup a ab
+
+headM :: [a] -> Maybe a
+headM (a:_) = Just a
+headM [] = Nothing
