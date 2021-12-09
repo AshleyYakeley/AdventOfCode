@@ -1,4 +1,3 @@
-{-# OPTIONS -Wno-incomplete-uni-patterns #-}
 module Main where
 import Lib
 
