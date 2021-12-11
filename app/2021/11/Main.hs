@@ -22,7 +22,7 @@ main = do
         newBoard :: IO Board
         newBoard = do
             board <- newArray ((0 :: Int,0 :: Int),(9,9)) (0 :: Int)
-            for_ (zip [0..9] $ lines inputstring) $ \(y,line) -> for_ (zip [0..9] line) $ \(x,c) -> writeArray board (x,y) $ read [c]
+            for_ (zip [0..] $ lines inputstring) $ \(y,line) -> for_ (zip [0..] line) $ \(x,c) -> writeArray board (x,y) $ read [c]
             return board
 
         doStep :: Board -> IO Int
@@ -35,19 +35,18 @@ main = do
 
             doFlashes :: IO Int
             doFlashes = do
-                countRef <- newIORef 0
-                for_ points $ \p -> do
+                flist <- for points $ \p -> do
                     e <- readArray board p
                     if e > 9 then do
                         for_ (neighbours p) $ \n -> modifyPoint n (\ne -> if ne > 0 then succ ne else 0)
                         writeArray board p 0
-                        modifyIORef countRef succ
-                    else return ()
-                c <- readIORef countRef
-                if c > 0 then do
-                    cc <- doFlashes
-                    return $ c + cc
-                else return 0
+                        return 1
+                    else return 0
+                let
+                    f = sum flist
+                if f > 0
+                    then fmap (+ f) doFlashes
+                    else return 0
             in do
                 for_ points $ \p -> modifyPoint p succ
                 doFlashes

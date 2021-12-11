@@ -10,6 +10,7 @@ import Data.Array.MArray as I hiding (range)
 import Data.Array.IO as I hiding (range)
 import Data.IORef as I
 import Control.Monad.Trans.State as I
+import Data.Monoid as I
 
 reportPart1 :: Show a => a -> IO ()
 reportPart1 a = putStrLn $ "Part 1: " <> show a
