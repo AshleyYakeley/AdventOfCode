@@ -9,8 +9,12 @@ import Control.Applicative as I
 import Data.Array.MArray as I hiding (range)
 import Data.Array.IO as I hiding (range)
 import Data.IORef as I
+import Control.Monad.Trans.Class as I
 import Control.Monad.Trans.State as I
+import Control.Monad.Trans.Reader as I hiding (liftCatch,liftCallCC)
 import Data.Monoid as I
+import Data.Char as I
+import Debug.Trace as I
 
 reportPart1 :: Show a => a -> IO ()
 reportPart1 a = putStrLn $ "Part 1: " <> show a
