@@ -6,6 +6,7 @@ import Data.Maybe as I
 import Data.List as I (sort,sortBy,sortOn,reverse,nub)
 import Data.Set as I (Set,fromList)
 import Control.Applicative as I
+import Data.Array.IArray as I hiding (range)
 import Data.Array.MArray as I hiding (range)
 import Data.Array.IO as I hiding (range)
 import Data.IORef as I
@@ -35,3 +36,11 @@ flookup a ab = fromMaybe (error "Nothing") $ lookup a ab
 headM :: [a] -> Maybe a
 headM (a:_) = Just a
 headM [] = Nothing
+
+startsWith :: Eq a => [a] -> [a] -> Maybe [a]
+startsWith [] s = Just s
+startsWith (a:aa) (b:bb) | a == b = startsWith aa bb
+startsWith _ _ = Nothing
+
+modifyList :: Int -> (a -> a) -> [a] -> [a]
+modifyList i f aa = take i aa <> (f (aa !! i) : drop (succ i) aa)
