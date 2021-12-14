@@ -6,7 +6,7 @@ import Data.Maybe as I
 import Data.List as I (sort,sortBy,sortOn,reverse,nub)
 import Data.Set as I (Set,fromList)
 import Control.Applicative as I
-import Data.Array.IArray as I hiding (range)
+import Data.Array.IArray as I hiding (range,elems,assocs)
 import Data.Array.MArray as I hiding (range)
 import Data.Array.IO as I hiding (range)
 import Data.IORef as I
@@ -16,6 +16,7 @@ import Control.Monad.Trans.Reader as I hiding (liftCatch,liftCallCC)
 import Data.Monoid as I
 import Data.Char as I
 import Debug.Trace as I
+import Data.Map as I  (Map,unionWith,singleton,elems,assocs)
 
 reportPart1 :: Show a => a -> IO ()
 reportPart1 a = putStrLn $ "Part 1: " <> show a
@@ -44,3 +45,7 @@ startsWith _ _ = Nothing
 
 modifyList :: Int -> (a -> a) -> [a] -> [a]
 modifyList i f aa = take i aa <> (f (aa !! i) : drop (succ i) aa)
+
+composeN :: Int -> (a -> a) -> (a -> a)
+composeN 0 _ = id
+composeN n aa = aa . composeN (pred n) aa
