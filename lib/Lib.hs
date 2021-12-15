@@ -49,3 +49,8 @@ modifyList i f aa = take i aa <> (f (aa !! i) : drop (succ i) aa)
 composeN :: Int -> (a -> a) -> (a -> a)
 composeN 0 _ = id
 composeN n aa = aa . composeN (pred n) aa
+
+while :: Monad m => m Bool -> m ()
+while mm = do
+    b <- mm
+    if b then while mm else return ()
