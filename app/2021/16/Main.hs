@@ -1,7 +1,5 @@
 {-# OPTIONS -Wno-incomplete-patterns #-}
 {-# OPTIONS -Wno-incomplete-uni-patterns #-}
-{-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE LambdaCase #-}
 module Main(main) where
 import Lib
 

@@ -16,6 +16,10 @@ dependencies:
 - transformers
 - array
 - containers
+default-extensions:
+- ScopedTypeVariables
+- LambdaCase
+- ViewPatterns
 
 ghc-options:
 - -Wall

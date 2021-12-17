@@ -1,5 +1,4 @@
 {-# OPTIONS -Wno-incomplete-patterns #-}
-{-# LANGUAGE ScopedTypeVariables #-}
 module Main(main) where
 import Lib
 
