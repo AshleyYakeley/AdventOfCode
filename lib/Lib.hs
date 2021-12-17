@@ -17,6 +17,7 @@ import Data.Monoid as I
 import Data.Char as I
 import Debug.Trace as I
 import Data.Map as I  (Map,unionWith,singleton,elems,assocs)
+import Text.Regex.TDFA as I hiding(empty)
 
 reportPart1 :: Show a => a -> IO ()
 reportPart1 a = putStrLn $ "Part 1: " <> show a
@@ -54,3 +55,8 @@ while :: Monad m => m Bool -> m ()
 while mm = do
     b <- mm
     if b then while mm else return ()
+
+getMatches :: String -> String -> [String]
+getMatches pat str = let
+    (_ :: String,_ :: String,_ :: String,matches) = str =~ pat
+    in matches
