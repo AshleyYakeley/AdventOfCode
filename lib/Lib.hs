@@ -32,6 +32,9 @@ wordsWhen p s =  case dropWhile p s of
                       s' -> w : wordsWhen p s''
                             where (w, s'') = break p s'
 
+splitString :: Char -> String -> [String]
+splitString c = wordsWhen ((==) c)
+
 flookup :: Eq a => a -> [(a, b)] -> b
 flookup a ab = fromMaybe (error "Nothing") $ lookup a ab
 
@@ -60,3 +63,25 @@ getMatches :: String -> String -> [String]
 getMatches pat str = let
     (_ :: String,_ :: String,_ :: String,matches) = str =~ pat
     in matches
+
+type Parser t = StateT [t] Maybe
+
+readEnd :: Parser t ()
+readEnd = StateT $ \case
+    [] -> Just ((),[])
+    (_:_) -> Nothing
+
+readToken :: Parser t t
+readToken = StateT $ \case
+    [] -> Nothing
+    (t:tt) -> Just (t,tt)
+
+readThis :: Eq t => t -> Parser t ()
+readThis t = do
+    t' <- readToken
+    if t == t' then return () else empty
+
+runParser :: Parser t a -> [t] -> a
+runParser p t = case runStateT p t of
+    Nothing -> error "parse failed"
+    Just (a,_) -> a
