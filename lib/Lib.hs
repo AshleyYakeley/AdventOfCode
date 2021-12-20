@@ -7,7 +7,9 @@ import Data.List as I (sort,sortBy,sortOn,reverse,nub)
 import Data.Set as I (Set,fromList)
 import Control.Applicative as I
 import Data.Array.IArray as I hiding (range,elems,assocs)
+import Data.Array.IArray (range)
 import Data.Array.MArray as I hiding (range)
+import Data.Array.Unboxed as I (UArray)
 import Data.Array.IO as I hiding (range)
 import Data.IORef as I
 import Control.Monad.Trans.Class as I
@@ -85,3 +87,6 @@ runParser :: Parser t a -> [t] -> a
 runParser p t = case runStateT p t of
     Nothing -> error "parse failed"
     Just (a,_) -> a
+
+makeArray :: (IArray a e, Ix i) => (i, i) -> (i -> e) -> a i e
+makeArray bb f = array bb $ fmap (\i -> (i,f i)) $ range bb

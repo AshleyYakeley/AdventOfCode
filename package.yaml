@@ -113,3 +113,7 @@ executables:
     source-dirs: app/2021/19
     dependencies: AdventOfCode
     main: Main.hs
+  AdventOfCode-2021-20:
+    source-dirs: app/2021/20
+    dependencies: AdventOfCode
+    main: Main.hs
