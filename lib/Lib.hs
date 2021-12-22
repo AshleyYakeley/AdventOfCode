@@ -19,7 +19,9 @@ import Data.Monoid as I
 import Data.Char as I
 import Debug.Trace as I
 import Data.Map as I  (Map,unionWith,singleton,elems,assocs)
+import qualified Data.Map
 import Text.Regex.TDFA as I hiding(empty)
+import Data.Functor.Identity as I
 
 reportPart1 :: Show a => a -> IO ()
 reportPart1 a = putStrLn $ "Part 1: " <> show a
@@ -90,3 +92,62 @@ runParser p t = case runStateT p t of
 
 makeArray :: (IArray a e, Ix i) => (i, i) -> (i -> e) -> a i e
 makeArray bb f = array bb $ fmap (\i -> (i,f i)) $ range bb
+
+newtype Hist a = MkHist (Map a Integer)
+
+instance Ord a => Semigroup (Hist a) where
+    MkHist m1 <> MkHist m2 = MkHist $ unionWith (+) m1 m2
+
+instance Ord a => Monoid (Hist a) where
+    mempty = MkHist mempty
+
+histLookup :: Ord a => Hist a -> a -> Integer
+histLookup (MkHist m) a = case Data.Map.lookup a m of
+    Just i -> i
+    Nothing -> 0
+
+histAddAssoc :: Ord a => (a,Integer) -> Hist a -> Hist a
+histAddAssoc (a,i) h@(MkHist m) = MkHist $ Data.Map.insert a (i + histLookup h a) m
+
+histAdd :: Ord a => a -> Hist a -> Hist a
+histAdd a = histAddAssoc (a,1)
+
+histFromList :: Ord a => [a] -> Hist a
+histFromList [] = mempty
+histFromList (a:aa) = histAdd a $ histFromList aa
+
+histFromAssocs :: Ord a => [(a,Integer)] -> Hist a
+histFromAssocs [] = mempty
+histFromAssocs (a:aa) = histAddAssoc a $ histFromAssocs aa
+
+histAssocs :: Hist a -> [(a,Integer)]
+histAssocs (MkHist m) = assocs m
+
+--
+newtype HistMonad a = MkHistMonad {unHistMonad :: [(a,Integer)]}
+
+instance Functor HistMonad where
+    fmap ab (MkHistMonad m) = MkHistMonad $ fmap (\(a,i) -> (ab a,i)) m
+
+instance Applicative HistMonad where
+    pure a = MkHistMonad $ pure (a,1)
+    liftA2 f ma mb = ma >>= \a -> fmap (\b -> f a b) mb
+
+instance Monad HistMonad where
+    return = pure
+    MkHistMonad m >>= f = MkHistMonad $ do
+        (a,i) <- m
+        (b,j) <- unHistMonad $ f a
+        return (b, i * j)
+
+hmReturnMany :: [a] -> HistMonad a
+hmReturnMany aa = MkHistMonad $ fmap (\a -> (a,1)) aa
+
+hmCollapse :: Ord a => HistMonad a -> HistMonad a
+hmCollapse (MkHistMonad m) = MkHistMonad $ histAssocs $ histFromAssocs m
+
+hmFilter :: (a -> Bool) -> HistMonad a -> HistMonad a
+hmFilter f (MkHistMonad m) = MkHistMonad $ filter (\(a,_) -> f a) m
+
+hmCount :: HistMonad a -> Integer
+hmCount (MkHistMonad m) = sum $ fmap snd m
