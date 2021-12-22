@@ -81,10 +81,20 @@ readToken = StateT $ \case
     [] -> Nothing
     (t:tt) -> Just (t,tt)
 
+readSatisfy :: (t -> Bool) -> Parser t t
+readSatisfy f = do
+    t <- readToken
+    if f t then return t else empty
+
 readThis :: Eq t => t -> Parser t ()
-readThis t = do
-    t' <- readToken
-    if t == t' then return () else empty
+readThis t = (readSatisfy $ (==) t) >> return ()
+
+readThese :: Eq t => [t] -> Parser t ()
+readThese [] = return ()
+readThese (t:tt) = readThis t >> readThese tt
+
+readInt :: Parser Char Int
+readInt = fmap read $ some $ readSatisfy $ \c -> elem c "-0123456789"
 
 runParser :: Parser t a -> [t] -> a
 runParser p t = case runStateT p t of
