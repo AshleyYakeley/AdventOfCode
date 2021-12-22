@@ -25,7 +25,6 @@ movePlayer maxscore i = do
 
 data Game m = MkGame {
     gMaxScore :: Int,
-    gCollapse :: forall a. Ord a => m a -> m a,
     gRollDie :: m Int,
     gDoPlayer1 :: forall a. State PState a -> m a,
     gDoPlayer2 :: forall a. State PState a -> m a
@@ -36,16 +35,23 @@ move MkGame{..} player = id $ do
     r <- gRollDie
     (if player then gDoPlayer2 else gDoPlayer1) $ movePlayer gMaxScore r
 
-play :: Monad m => Game m -> m Bool
-play game = do
+moves :: Monad m => Game m -> m (Maybe Bool)
+moves game = do
     w <- move game False
     case w of
-        True -> return False
+        True -> return $ Just False
         False -> do
             w2 <- move game True
             case w2 of
-                True -> return True
-                False -> play game
+                True -> return $ Just True
+                False -> return Nothing
+
+play :: Monad m => Game m -> m Bool
+play game = do
+    mw <- moves game
+    case mw of
+        Just w -> return w
+        Nothing -> play game
 
 data GState die = MkGState {
     gsDie :: die,
@@ -67,7 +73,6 @@ rollDeterminist = do
 game1 :: Game (S DState)
 game1 = MkGame {
     gMaxScore = 1000,
-    gCollapse = id,
     gRollDie = do
         r1 <- rollDeterminist
         r2 <- rollDeterminist
@@ -90,10 +95,23 @@ play1 = do
 rollDirac :: HistMonad Int
 rollDirac = hmReturnMany [1,2,3]
 
+play' :: Game (StateT (PState,PState) HistMonad) -> HistMonad (PState,PState) -> HistMonad Bool
+play' _ oldworlds | hmCount oldworlds == 0 = MkHistMonad []
+play' game oldworlds = let
+    newthing = hmCollapse $ do
+        olds <- oldworlds
+        runStateT (moves game) olds
+    hb = hmMapMaybe (\(a,_) -> a) newthing
+    newworlds :: HistMonad (PState,PState)
+    newworlds = hmMapMaybe (\(a,s) -> case a of
+        Just _ -> Nothing
+        Nothing -> Just s) newthing
+    hbb = play' game newworlds
+    in hb <> hbb
+
 game2 :: Game (StateT (PState,PState) HistMonad)
 game2 = MkGame {
     gMaxScore = 21,
-    gCollapse = id,
     gRollDie = lift $ hmCollapse $ do
         r1 <- rollDirac
         r2 <- rollDirac
@@ -116,7 +134,8 @@ main = do
         sp2 = newPState $ read $ last $ splitString ' ' $ ll !! 1
     reportPart1 $ runIdentity $ evalStateT play1 $ MkGState 0 sp1 sp2
     let
-        h = evalStateT (play game2) (sp1,sp2)
+        -- h = evalStateT (play 0 game2) (sp1,sp2)
+        h = play' game2 $ return (sp1,sp2)
     _ <- evaluate $ hmCount h
     let
         p1wins = hmCount $ hmFilter not h

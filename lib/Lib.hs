@@ -1,3 +1,4 @@
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
 module Lib(module I,module Lib) where
 
 import Data.Foldable as I
@@ -13,7 +14,7 @@ import Data.Array.Unboxed as I (UArray)
 import Data.Array.IO as I hiding (range)
 import Data.IORef as I
 import Control.Monad.Trans.Class as I
-import Control.Monad.Trans.State as I
+import Control.Monad.Trans.State.Strict as I
 import Control.Monad.Trans.Reader as I hiding (liftCatch,liftCallCC)
 import Data.Monoid as I
 import Data.Char as I
@@ -124,7 +125,7 @@ histAssocs :: Hist a -> [(a,Integer)]
 histAssocs (MkHist m) = assocs m
 
 --
-newtype HistMonad a = MkHistMonad {unHistMonad :: [(a,Integer)]}
+newtype HistMonad a = MkHistMonad {unHistMonad :: [(a,Integer)]} deriving (Semigroup,Monoid)
 
 instance Functor HistMonad where
     fmap ab (MkHistMonad m) = MkHistMonad $ fmap (\(a,i) -> (ab a,i)) m
@@ -148,6 +149,9 @@ hmCollapse (MkHistMonad m) = MkHistMonad $ histAssocs $ histFromAssocs m
 
 hmFilter :: (a -> Bool) -> HistMonad a -> HistMonad a
 hmFilter f (MkHistMonad m) = MkHistMonad $ filter (\(a,_) -> f a) m
+
+hmMapMaybe :: (a -> Maybe b) -> HistMonad a -> HistMonad b
+hmMapMaybe f (MkHistMonad m) = MkHistMonad $ mapMaybe (\(a,i) -> fmap (\b -> (b,i)) $ f a) m
 
 hmCount :: HistMonad a -> Integer
 hmCount (MkHistMonad m) = sum $ fmap snd m
