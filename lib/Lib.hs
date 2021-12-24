@@ -14,7 +14,9 @@ import Data.Array.Unboxed as I (UArray)
 import Data.Array.IO as I hiding (range)
 import Data.IORef as I
 import Control.Monad.Trans.Class as I
-import Control.Monad.Trans.State.Strict as I
+import Control.Monad.IO.Class as I
+import Control.Monad.Trans.State.Strict as I hiding (liftCatch,liftCallCC)
+import Control.Monad.Trans.Writer as I hiding (liftCatch,liftCallCC)
 import Control.Monad.Trans.Reader as I hiding (liftCatch,liftCallCC)
 import Data.Monoid as I
 import Data.Char as I
