@@ -106,6 +106,13 @@ runParser p t = case runStateT p t of
 makeArray :: (IArray a e, Ix i) => (i, i) -> (i -> e) -> a i e
 makeArray bb f = array bb $ fmap (\i -> (i,f i)) $ range bb
 
+makeArrayM :: Monad m => (IArray a e, Ix i) => (i, i) -> (i -> m e) -> m (a i e)
+makeArrayM bb f = do
+    aa <- for (range bb) $ \i -> do
+        e <- f i
+        return (i,e)
+    return $ array bb aa
+
 newtype Hist a = MkHist (Map a Integer)
 
 instance Ord a => Semigroup (Hist a) where
